@@ -4,6 +4,8 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY config config
+COPY services services
+COPY workers.go workers.go
 COPY main.go main.go
 RUN go build -v -o /tmp/api
 
