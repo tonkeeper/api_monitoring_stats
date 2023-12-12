@@ -1,0 +1,133 @@
+openapi: 3.0.1
+info:
+  title: "REST API"
+  version: 0.0.1
+  contact:
+    name: "Support"
+    email: "contact@tonaps.org"
+
+servers:
+  - url: "http://localhost:8888"
+
+paths:
+  /ready:
+    get:
+      operationId: pingReadyGet
+      tags:
+        - system
+      responses:
+        '200':
+          description: "Ok"
+        '500':
+          $ref: '#/components/responses/InternalError'
+    head:
+      operationId: pingReadyHead
+      tags:
+        - system
+      responses:
+        '200':
+          description: "Ok"
+        '500':
+          $ref: '#/components/responses/InternalError'
+          
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  
+  schemas:
+    Ok:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      required:
+        - error
+        - code
+      properties:
+        error:
+          type: string
+          description: "Error message"
+        code:
+          type: integer
+          description: "backend error code"
+          enum: [ 1, 2, 3 ]
+          x-enum-varnames: [ ]
+  
+  responses:
+    NotFound:
+      description: "The specified resource was not found"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+              - code
+            properties:
+              error:
+                type: string
+                description: "Error message"
+              code:
+                type: integer
+                description: "backend error code"
+    InternalError:
+      description: "Something went wrong on server side"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+              - code
+            properties:
+              error:
+                type: string
+                description: "Error message"
+              code:
+                type: integer
+                description: "backend error code"
+    BadRequest:
+      description: "Something went wrong on client side"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+              - code
+            properties:
+              error:
+                type: string
+                description: "Error message"
+              code:
+                type: integer
+                description: "backend error code"
+    UnauthorizedError:
+      description: "Access token is missing or invalid"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+              - code
+            properties:
+              error:
+                type: string
+                description: "Error message"
+              code:
+                type: integer
+                description: "backend error code"
+    Ok:
+      description: "Ok"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Ok'
