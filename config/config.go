@@ -10,9 +10,7 @@ import (
 var ElectorAccountID = ton.MustParseAccountID("Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF")
 
 var Config = struct {
-	Dev         string `env:"DEV"`
-	Port        int    `env:"PORT" envDefault:"8888"`
-	MetricsPort int    `env:"METRICS_PORT" envDefault:"9010"`
+	MetricsPort int `env:"METRICS_PORT" envDefault:"9010"`
 }{}
 
 func LoadConfig() {

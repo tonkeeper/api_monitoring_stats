@@ -1,0 +1,39 @@
+version: '3.4'
+
+x-default-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "300m"
+    max-file: '3'
+
+networks:
+  monitoring: null
+services:
+  monitoring:
+    container_name: tonstatus-monitoring
+    image: monitoring
+    restart: unless-stopped
+    logging: *default-logging
+    networks:
+      - monitoring
+
+  prometheus:
+    container_name: tonstatus-prometheus
+    image: prom/prometheus
+    restart: unless-stopped
+    logging: *default-logging
+    networks:
+      - monitoring
+    volumes:
+      - prometheus-data:/prometheus
+  grafana:
+    container_name: tonstatus-grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    logging: *default-logging
+    networks:
+      - monitoring
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"

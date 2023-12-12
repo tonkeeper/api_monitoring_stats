@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/prometheus/client_golang v1.17.0
+	github.com/tonkeeper/tonapi-go v0.0.2
 	github.com/tonkeeper/tongo v1.4.1
 )
 
@@ -21,7 +22,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.4.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
@@ -33,7 +34,6 @@ require (
 	github.com/r3labs/sse/v2 v2.10.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/snksoft/crc v1.1.0 // indirect
-	github.com/tonkeeper/opentonapi/tonapi v0.0.0-20231211204000-ca1ddaa33605 // indirect
 	go.opentelemetry.io/otel v1.19.0 // indirect
 	go.opentelemetry.io/otel/metric v1.19.0 // indirect
 	go.opentelemetry.io/otel/trace v1.19.0 // indirect

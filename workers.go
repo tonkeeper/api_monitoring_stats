@@ -1,28 +1,40 @@
 package main
 
 import (
-	"time"
-
 	"api_monitoring_stats/services"
-	"api_monitoring_stats/services/tonapi"
+	"context"
+	"fmt"
+	"time"
 )
 
-func workerMetrics() {
+type metrics interface {
+	GetMetrics(ctx context.Context) services.ApiMetrics
+}
+
+func workerMetrics(sources []metrics) {
 	for {
-		tonApiMetrics, _ := tonapi.NewMonitoring().GetMetrics()
-
-		metrics := []services.ApiMetrics{tonApiMetrics}
-		for _, metric := range metrics {
-			serviceName := string(metric.ServiceName)
-			services.MetricServiceTimeHistogramVec.WithLabelValues(serviceName).Observe(metric.HttpsLatency)
-			services.MetricServiceIndexingLatencyHistogramVec.WithLabelValues(serviceName).Observe(metric.IndexingLatency)
-			if metric.Alive {
-				services.MetricServiceRequestSuccess.WithLabelValues(serviceName).Inc()
-			} else {
-				services.MetricServiceRequestFails.WithLabelValues(serviceName).Inc()
-			}
+		for _, s := range sources {
+			collect(s)
 		}
+		time.Sleep(time.Minute)
+	}
+}
 
-		time.Sleep(1 * time.Minute)
+func collect(s metrics) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	m := s.GetMetrics(ctx)
+	MetricServiceTimeHistogramVec.WithLabelValues(m.ServiceName).Observe(m.HttpsLatency)
+	MetricServiceIndexingLatencyHistogramVec.WithLabelValues(m.ServiceName).Observe(m.IndexingLatency)
+	status := Alive
+	if m.SuccessChecks == 0 {
+		status = Dead
+	} else if m.SuccessChecks < m.TotalChecks {
+		status = Undead
+	}
+	MetricServiceRequest.WithLabelValues(m.ServiceName, status).Inc()
+
+	for _, err := range m.Errors {
+		fmt.Println("Service", m.ServiceName, err.Error())
 	}
 }

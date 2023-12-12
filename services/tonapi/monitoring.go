@@ -1,57 +1,63 @@
 package tonapi
 
 import (
+	"api_monitoring_stats/services"
 	"context"
-	"log"
+	"fmt"
 	"time"
 
 	"api_monitoring_stats/config"
-	"api_monitoring_stats/services"
-	"github.com/tonkeeper/opentonapi/tonapi"
+	"github.com/tonkeeper/tonapi-go"
 )
 
 type TonAPI struct{}
+
+const serviceName = "tonapi"
 
 func NewMonitoring() *TonAPI {
 	return &TonAPI{}
 }
 
-func (t *TonAPI) GetMetrics() (services.ApiMetrics, error) {
-	tonApiClient, err := tonapi.New()
+var tonApiClient *tonapi.Client
+
+func init() {
+	var err error
+	tonApiClient, err = tonapi.New()
 	if err != nil {
-		log.Printf("failed to init tonapi client: %v", err)
-		return services.ApiMetrics{}, err
+		panic(err)
 	}
+}
+
+func (t *TonAPI) GetMetrics(ctx context.Context) services.ApiMetrics {
 
 	metrics := services.ApiMetrics{
-		ServiceName: services.TonApi,
-		Alive:       true,
+		ServiceName: serviceName,
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
 	start := time.Now()
-	_, err = tonApiClient.GetAccountState(ctx, config.ElectorAccountID)
+	metrics.TotalChecks++
+	_, err := tonApiClient.GetAccountState(ctx, config.ElectorAccountID)
 	if err != nil {
-		log.Printf("failed to get account state, service: %v, %v", services.TonApi, err)
-		metrics.Alive = false
+		metrics.Errors = append(metrics.Errors, fmt.Errorf("failed to get account state: %w", err))
+	} else {
+		metrics.SuccessChecks++
 	}
 	metrics.HttpsLatency = time.Since(start).Seconds()
 
+	metrics.TotalChecks++
 	transactions, err := tonApiClient.GetBlockchainAccountTransactions(ctx, tonapi.GetBlockchainAccountTransactionsParams{
 		AccountID: config.ElectorAccountID.ToRaw(),
-		Limit:     tonapi.NewOptInt32(10),
+		Limit:     tonapi.NewOptInt32(1),
 	})
 	if err != nil {
-		log.Printf("failed to get account transactions, service: %v, %v", services.TonApi, err)
-		metrics.Alive = false
-		return metrics, err
+		metrics.Errors = append(metrics.Errors, fmt.Errorf("failed to get account transactions: %w", err))
+		return metrics
 	}
 	if len(transactions.Transactions) == 0 {
-		return metrics, nil
+		metrics.Errors = append(metrics.Errors, fmt.Errorf("no transactions found"))
+		return metrics
 	}
+	metrics.SuccessChecks++
 	metrics.IndexingLatency = float64(time.Now().Unix() - transactions.Transactions[0].Utime)
 
-	return metrics, nil
+	return metrics
 }
