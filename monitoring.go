@@ -12,7 +12,7 @@ const Undead = "degraded"
 var (
 	MetricServiceTimeHistogramVec = promauto.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "service_functions_time",
+			Name:    "tonstatus_functions_time",
 			Help:    "Service functions execution duration distribution in seconds",
 			Buckets: []float64{0.01, 0.05, 0.1, 1, 5, 10},
 		},
@@ -21,7 +21,7 @@ var (
 
 	MetricServiceIndexingLatencyHistogramVec = promauto.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "service_indexing_latency",
+			Name:    "tonstatus_indexing_latency",
 			Help:    "",
 			Buckets: []float64{1, 5, 10, 30, 60, 120, 300, 600, 1200, 1800, 3600},
 		},
@@ -29,7 +29,7 @@ var (
 	)
 
 	MetricServiceRequest = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "service_requests",
+		Name: "tonstatus_requests",
 		Help: "The total number of success request",
 	}, []string{"service", "status"})
 )

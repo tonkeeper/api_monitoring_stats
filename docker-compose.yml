@@ -8,10 +8,16 @@ x-default-logging: &default-logging
 
 networks:
   monitoring: null
+volumes:
+  prometheus-data: null
+  grafana-data: null
 services:
   monitoring:
     container_name: tonstatus-monitoring
-    image: monitoring
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: monitoring:latest
     restart: unless-stopped
     logging: *default-logging
     networks:
@@ -26,6 +32,7 @@ services:
       - monitoring
     volumes:
       - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
   grafana:
     container_name: tonstatus-grafana
     image: grafana/grafana
@@ -35,5 +42,6 @@ services:
       - monitoring
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./grafana-provisioning:/etc/grafana/provisioning
     ports:
       - "3000:3000"
