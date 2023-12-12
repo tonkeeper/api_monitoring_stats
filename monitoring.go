@@ -5,10 +5,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
-const Dead = "dead"
-const Alive = "alive"
-const Undead = "degraded"
-
 var (
 	MetricServiceTimeHistogramVec = promauto.NewHistogramVec(
 		prometheus.HistogramOpts{
@@ -22,14 +18,14 @@ var (
 	MetricServiceIndexingLatencyHistogramVec = promauto.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_indexing_latency",
-			Help:    "",
+			Help:    "difference between current time and last transaction on electror",
 			Buckets: []float64{1, 5, 10, 30, 60, 120, 300, 600, 1200, 1800, 3600},
 		},
 		[]string{"service"},
 	)
 
-	MetricServiceRequest = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "tonstatus_requests",
-		Help: "The total number of success request",
-	}, []string{"service", "status"})
+	MetricServiceRequest = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "tonstatus_http_api",
+		Help: "availability of http api",
+	}, []string{"service"})
 )
