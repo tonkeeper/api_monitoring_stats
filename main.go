@@ -1,6 +1,7 @@
 package main
 
 import (
+	public_config "api_monitoring_stats/services/public-config"
 	"api_monitoring_stats/services/tonhub"
 	"fmt"
 	"log"
@@ -30,7 +31,9 @@ func main() {
 		tonapi.NewMonitoring(),
 		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
 		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
+		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
+		public_config.NewLiteServersMetrics(),
 	}
 	go workerMetrics(sources)
 
