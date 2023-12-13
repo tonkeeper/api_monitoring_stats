@@ -35,7 +35,9 @@ func (t *TonAPI) GetMetrics(ctx context.Context) services.ApiMetrics {
 	}
 	start := time.Now()
 	metrics.TotalChecks++
-	_, err := tonApiClient.GetAccountState(ctx, config.ElectorAccountID)
+	_, err := tonApiClient.GetAccount(ctx, tonapi.GetAccountParams{
+		config.ElectorAccountID.ToRaw(),
+	})
 	if err != nil {
 		metrics.Errors = append(metrics.Errors, fmt.Errorf("failed to get account state: %w", err))
 	} else {

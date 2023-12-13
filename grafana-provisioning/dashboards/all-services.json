@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -56,8 +57,8 @@
           "unit": "percentunit"
         },
         "color": {
-          "exponent": 0.5,
-          "fill": "green",
+          "exponent": 1.5,
+          "fill": "dark-green",
           "max": 1,
           "min": 0,
           "mode": "scheme",
@@ -69,9 +70,7 @@
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
         },
-        "filterValues": {
-          "le": 1e-9
-        },
+        "filterValues": {},
         "legend": {
           "show": true
         },
@@ -188,7 +187,7 @@
           "refId": "A"
         }
       ],
-      "title": "Tonapi indexing latency",
+      "title": "Indexing latency",
       "type": "heatmap"
     },
     {
@@ -292,6 +291,6 @@
   "timezone": "",
   "title": "All services",
   "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 1,
+  "version": 4,
   "weekStart": ""
 }
