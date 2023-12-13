@@ -10,7 +10,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_functions_time",
 			Help:    "Service functions execution duration distribution in seconds",
-			Buckets: []float64{0.01, 0.05, 0.1, 1, 5, 10},
+			Buckets: []float64{0.01, 0.05, 0.1, 0.25, 0.5, 0.7, 1, 2.5, 5, 10},
 		},
 		[]string{"service"},
 	)
@@ -19,7 +19,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_indexing_latency",
 			Help:    "difference between current time and last transaction on electror",
-			Buckets: []float64{1, 5, 10, 30, 60, 120, 300, 600, 1200, 1800, 3600},
+			Buckets: []float64{1, 5, 10, 20, 30, 60, 120, 300, 600, 1200, 1800, 3600},
 		},
 		[]string{"service"},
 	)
