@@ -19,7 +19,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_indexing_latency",
 			Help:    "difference between current time and last transaction on electror",
-			Buckets: []float64{1, 5, 10, 20, 30, 60, 120, 300, 600, 1200, 1800, 3600},
+			Buckets: []float64{0.5, 1, 5, 7.5, 10, 12.5, 15, 17.5, 20, 25, 30, 60, 120, 300, 600, 1200, 3600},
 		},
 		[]string{"service"},
 	)
