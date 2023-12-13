@@ -7,6 +7,7 @@ require (
 	github.com/prometheus/client_golang v1.17.0
 	github.com/tonkeeper/tonapi-go v0.0.2
 	github.com/tonkeeper/tongo v1.4.1
+	github.com/xssnick/tonutils-go v1.8.8
 )
 
 require (
@@ -35,7 +36,6 @@ require (
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sigurn/crc16 v0.0.0-20211026045750-20ab5afb07e3 // indirect
 	github.com/snksoft/crc v1.1.0 // indirect
-	github.com/xssnick/tonutils-go v1.8.8 // indirect
 	go.opentelemetry.io/otel v1.19.0 // indirect
 	go.opentelemetry.io/otel/metric v1.19.0 // indirect
 	go.opentelemetry.io/otel/trace v1.19.0 // indirect
