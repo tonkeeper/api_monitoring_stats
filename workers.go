@@ -1,10 +1,11 @@
 package main
 
 import (
-	"api_monitoring_stats/services"
 	"context"
 	"fmt"
 	"time"
+
+	"api_monitoring_stats/services"
 )
 
 type metrics interface {

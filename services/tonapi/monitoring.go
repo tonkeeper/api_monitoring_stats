@@ -1,10 +1,11 @@
 package tonapi
 
 import (
-	"api_monitoring_stats/services"
 	"context"
 	"fmt"
 	"time"
+
+	"api_monitoring_stats/services"
 
 	"api_monitoring_stats/config"
 	"github.com/tonkeeper/tonapi-go"
@@ -29,7 +30,6 @@ func init() {
 }
 
 func (t *TonAPI) GetMetrics(ctx context.Context) services.ApiMetrics {
-
 	metrics := services.ApiMetrics{
 		ServiceName: serviceName,
 	}

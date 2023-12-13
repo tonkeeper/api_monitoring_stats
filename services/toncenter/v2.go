@@ -1,13 +1,14 @@
 package toncenter
 
 import (
-	"api_monitoring_stats/config"
-	"api_monitoring_stats/services"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+
+	"api_monitoring_stats/config"
+	"api_monitoring_stats/services"
 )
 
 type V2Monitoring struct {
@@ -26,9 +27,10 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m := services.ApiMetrics{
 		ServiceName: vm.name,
 	}
+	time.Sleep(1 * time.Second)
 	m.TotalChecks++
 	t := time.Now()
-	r, err := http.Get(fmt.Sprintf("%vgetAddressInformation?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
+	r, err := http.Get(fmt.Sprintf("%v/getAddressInformation?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
 	if err != nil || r.StatusCode != http.StatusOK {
 		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w", err))
 	} else {
@@ -36,7 +38,9 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	}
 	m.HttpsLatency = time.Since(t).Seconds()
 	m.TotalChecks++
-	r, err = http.Get(fmt.Sprintf("%vgetTransactions?address=%v&limit=1&to_lt=0&archival=false", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
+
+	time.Sleep(1 * time.Second)
+	r, err = http.Get(fmt.Sprintf("%v/getTransactions?address=%v&limit=1&to_lt=0&archival=false", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
 	if err != nil {
 		m.Errors = append(m.Errors, fmt.Errorf("failed to get account transactions: %w", err))
 		return m
@@ -45,9 +49,9 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	var body struct {
 		Result []struct {
 			Utime int64 `json:"utime"`
-		}
+		} `json:"result"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+	if err = json.NewDecoder(r.Body).Decode(&body); err != nil {
 		m.Errors = append(m.Errors, fmt.Errorf("failed to decode response body: %w", err))
 		return m
 	}

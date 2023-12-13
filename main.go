@@ -1,12 +1,13 @@
 package main
 
 import (
-	"api_monitoring_stats/services/tonapi"
-	"api_monitoring_stats/services/toncenter"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
+
+	"api_monitoring_stats/services/tonapi"
+	"api_monitoring_stats/services/toncenter"
 
 	"api_monitoring_stats/config"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -26,7 +27,8 @@ func main() {
 	}()
 	sources := []metrics{
 		tonapi.NewMonitoring(),
-		toncenter.NewV2Monitoring("toncenter.com", "https://toncenter.com/api/v2/"),
+		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
+		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
 	}
 	go workerMetrics(sources)
 
