@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api_monitoring_stats/services/tonhub"
 	"fmt"
 	"log"
 	"net/http"
@@ -29,6 +30,7 @@ func main() {
 		tonapi.NewMonitoring(),
 		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
 		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
+		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 	}
 	go workerMetrics(sources)
 
