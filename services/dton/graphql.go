@@ -31,7 +31,7 @@ func NewMonitoring(name, prefix string) *Monitoring {
 
 func (m *Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	metrics := services.ApiMetrics{
-		ServiceName: m.prefix,
+		ServiceName: m.name,
 	}
 	start := time.Now()
 	metrics.TotalChecks++
