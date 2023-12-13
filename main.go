@@ -29,12 +29,12 @@ func main() {
 	}()
 	sources := []metrics{
 		tonapi.NewMonitoring(),
-		dton.NewMonitoring("dton", "https://dton.io/graphql"),
 		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
 		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
 		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 		public_config.NewLiteServersMetrics(),
+		dton.NewMonitoring("dton", "https://dton.io/graphql"),
 	}
 	go workerMetrics(sources)
 

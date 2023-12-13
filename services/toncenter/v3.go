@@ -27,7 +27,6 @@ func (vm *V3Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m := services.ApiMetrics{
 		ServiceName: vm.name,
 	}
-	time.Sleep(1 * time.Second)
 	m.TotalChecks++
 	t := time.Now()
 	r, err := http.Get(fmt.Sprintf("%v/account?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
