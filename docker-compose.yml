@@ -10,7 +10,7 @@ networks:
   monitoring: null
 volumes:
   prometheus-data: null
-  grafana-data2: null
+  grafana-data: null
 services:
   monitoring:
     container_name: tonstatus-monitoring
@@ -41,7 +41,7 @@ services:
     networks:
       - monitoring
     volumes:
-      - grafana-data2:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
       - ./grafana-provisioning:/etc/grafana/provisioning
     ports:
       - "3000:3000"
