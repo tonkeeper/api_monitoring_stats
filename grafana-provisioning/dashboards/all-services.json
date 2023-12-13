@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -52,7 +51,7 @@
       "id": 1,
       "options": {
         "calculate": false,
-        "cellGap": 6,
+        "cellGap": 5,
         "cellValues": {
           "unit": "percentunit"
         },
@@ -137,7 +136,7 @@
       "id": 2,
       "options": {
         "calculate": false,
-        "cellGap": 1,
+        "cellGap": 5,
         "cellValues": {
           "unit": "s"
         },
@@ -293,6 +292,6 @@
   "timezone": "",
   "title": "All services",
   "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 12,
+  "version": 1,
   "weekStart": ""
 }

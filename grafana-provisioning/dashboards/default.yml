@@ -6,3 +6,4 @@ providers:
     type: file
     options:
       path: /etc/grafana/provisioning/dashboards # Path to dashboard files on disk
+    allowUiUpdates: true
