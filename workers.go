@@ -15,7 +15,7 @@ type metrics interface {
 func workerMetrics(sources []metrics) {
 	for {
 		for _, s := range sources {
-			go collect(s)
+			collect(s)
 		}
 		time.Sleep(time.Second * 30)
 	}
