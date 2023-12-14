@@ -27,6 +27,69 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false
+      },
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum(sum_over_time(tonstatus_http_api[$__range])) by (service) / sum(count_over_time(tonstatus_http_api[$__range])) by (service)",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Uptime",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -44,10 +107,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 5
       },
       "id": 1,
       "options": {
@@ -74,7 +137,7 @@
           "le": -1
         },
         "legend": {
-          "show": true
+          "show": false
         },
         "rowsFrame": {
           "layout": "auto",
@@ -132,7 +195,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 12
       },
       "id": 2,
       "options": {
@@ -217,7 +280,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 21
       },
       "id": 3,
       "options": {
@@ -279,20 +342,20 @@
       "type": "heatmap"
     }
   ],
-  "refresh": "",
+  "refresh": "5m",
   "schemaVersion": 38,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "All services",
   "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 9,
+  "version": 18,
   "weekStart": ""
 }
