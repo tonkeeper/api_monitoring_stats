@@ -43,7 +43,7 @@ func (lm *LiteServersMetrics) connect() error {
 
 func (lm *LiteServersMetrics) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m := services.ApiMetrics{
-		ServiceName: "public config",
+		ServiceName: "public liteservers",
 	}
 
 	m.TotalChecks++
