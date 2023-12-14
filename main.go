@@ -35,7 +35,6 @@ func main() {
 		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 		public_config.NewLiteServersMetrics(),
-		dton.NewMonitoring("dton", "https://dton.io/graphql"),
 	}
 	go workerMetrics(sources)
 
