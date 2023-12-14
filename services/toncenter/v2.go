@@ -29,19 +29,26 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	}
 	m.TotalChecks++
 	t := time.Now()
-	r, err := http.Get(fmt.Sprintf("%v/getAddressInformation?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
+	url := fmt.Sprintf("%v/getAddressInformation?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
+	if config.Config.TonCenterApiToken != "" {
+		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	}
+	r, err := http.Get(url)
 	if err != nil || r.StatusCode != http.StatusOK {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w", err))
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w, status code %v", err, r.StatusCode))
 	} else {
 		m.SuccessChecks++
 	}
 	m.HttpsLatency = time.Since(t).Seconds()
 	m.TotalChecks++
 
-	time.Sleep(1 * time.Second)
-	r, err = http.Get(fmt.Sprintf("%v/getTransactions?address=%v&limit=1&to_lt=0&archival=false", vm.prefix, config.ElectorAccountID.ToHuman(true, false)))
-	if err != nil {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get account transactions: %w", err))
+	url = fmt.Sprintf("%v/getTransactions?address=%v&limit=1&to_lt=0&archival=false", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
+	if config.Config.TonCenterApiToken != "" {
+		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	}
+	r, err = http.Get(url)
+	if err != nil || r.StatusCode != http.StatusOK {
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get account transactions: %w, status code: %v", err, r.StatusCode))
 		return m
 	}
 	defer r.Body.Close()
