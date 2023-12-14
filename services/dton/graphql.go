@@ -96,7 +96,7 @@ func sendRequest(url string, body []byte) ([]byte, error) {
 		return nil, err
 	}
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("")
+		return nil, fmt.Errorf("bad status code: %v", res.StatusCode)
 	}
 
 	return respBody, nil
