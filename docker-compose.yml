@@ -18,6 +18,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: monitoring:latest
+    env_file:
+      - .env
     restart: unless-stopped
     logging: *default-logging
     networks:
