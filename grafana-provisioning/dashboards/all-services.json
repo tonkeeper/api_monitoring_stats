@@ -52,7 +52,7 @@
       "id": 1,
       "options": {
         "calculate": false,
-        "cellGap": 5,
+        "cellGap": 2,
         "cellValues": {
           "unit": "percentunit"
         },
@@ -70,7 +70,9 @@
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
         },
-        "filterValues": {},
+        "filterValues": {
+          "le": -1
+        },
         "legend": {
           "show": true
         },
@@ -135,7 +137,7 @@
       "id": 2,
       "options": {
         "calculate": false,
-        "cellGap": 5,
+        "cellGap": 2,
         "cellValues": {
           "unit": "s"
         },
@@ -220,7 +222,7 @@
       "id": 3,
       "options": {
         "calculate": false,
-        "cellGap": 5,
+        "cellGap": 2,
         "cellValues": {
           "unit": "s"
         },
@@ -284,13 +286,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "All services",
   "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 4,
+  "version": 9,
   "weekStart": ""
 }
