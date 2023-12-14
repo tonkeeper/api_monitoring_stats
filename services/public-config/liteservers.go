@@ -62,6 +62,7 @@ func (lm *LiteServersMetrics) GetMetrics(ctx context.Context) services.ApiMetric
 	a, err := lm.client.GetAccount(ctx, b, elector)
 	if err != nil {
 		m.Errors = append(m.Errors, err)
+		return m
 	} else if a.State == nil || a.State.Balance.Nano().Int64() == 0 {
 		m.Errors = append(m.Errors, fmt.Errorf("invalid account state"))
 	} else {

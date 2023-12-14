@@ -42,3 +42,7 @@ func main() {
 		time.Sleep(time.Hour)
 	}
 }
+
+//todo:
+//curl 'https://api.dedust.io/v2/routing/plan'-X POST -H 'content-type: application/json'   --data-raw '{"from":"native","to":"jetton:0:65aac9b5e380eae928db3c8e238d9bc0d61a9320fdc2bc7a2f6c87d6fedf9208","amount":"1000000000"}'
+//curl 'https://rpc.ston.fi/' --compressed -X POST -H 'Content-Type: application/json'  --data-raw '{"jsonrpc":"2.0","id":7,"method":"dex.simulate_swap","params":{"offer_address":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c","offer_units":"1000000000","ask_address":"EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO","slippage_tolerance":"0.001"}}'
