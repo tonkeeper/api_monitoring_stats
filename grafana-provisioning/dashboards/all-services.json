@@ -32,6 +32,7 @@
           "color": {
             "mode": "continuous-RdYlGr"
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -356,6 +357,6 @@
   "timezone": "",
   "title": "All services",
   "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 18,
+  "version": 19,
   "weekStart": ""
 }
