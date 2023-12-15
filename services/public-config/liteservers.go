@@ -52,12 +52,13 @@ func (lm *LiteServersMetrics) GetMetrics(ctx context.Context) services.ApiMetric
 		return m
 	}
 
+	t := time.Now()
+
 	b, err := lm.client.GetMasterchainInfo(ctx)
 	if err != nil {
 		m.Errors = append(m.Errors, err)
 	}
 
-	t := time.Now()
 	elector := address.MustParseAddr(config.ElectorAccountID.ToHuman(true, false))
 	a, err := lm.client.GetAccount(ctx, b, elector)
 	if err != nil {
