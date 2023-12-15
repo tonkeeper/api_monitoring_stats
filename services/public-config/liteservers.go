@@ -51,8 +51,8 @@ func (lm *LiteServersMetrics) GetMetrics(ctx context.Context) services.ApiMetric
 		m.Errors = append(m.Errors, liteclient.ErrNoConnections)
 		return m
 	}
-	// we need fresh block info to run get methods
-	b, err := lm.client.CurrentMasterchainInfo(ctx)
+
+	b, err := lm.client.GetMasterchainInfo(ctx)
 	if err != nil {
 		m.Errors = append(m.Errors, err)
 	}
