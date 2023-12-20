@@ -34,8 +34,10 @@ func (vm *V3Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
 	}
 	r, err := http.Get(url)
-	if err != nil || r.StatusCode != http.StatusOK {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w, status code: %v", err, r.StatusCode))
+	if err != nil {
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w", err))
+	} else if r.StatusCode != http.StatusOK {
+		m.Errors = append(m.Errors, fmt.Errorf("invalid status code %v", r.StatusCode))
 	} else {
 		m.SuccessChecks++
 	}

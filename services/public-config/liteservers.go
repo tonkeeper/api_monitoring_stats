@@ -30,7 +30,7 @@ func NewLiteServersMetrics() *LiteServersMetrics {
 
 func (lm *LiteServersMetrics) connect() error {
 	pool := liteclient.NewConnectionPool()
-	configUrl := "https://ton-blockchain.github.io/global.config.json"
+	configUrl := "https://api.tontech.io/ton/wallet-mainnet.autoconf.json"
 	err := pool.AddConnectionsFromConfigUrl(context.Background(), configUrl)
 	if err != nil {
 		return err
