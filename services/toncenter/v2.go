@@ -49,8 +49,11 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
 	}
 	r, err = http.Get(url)
-	if err != nil || r.StatusCode != http.StatusOK {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get account transactions: %w, status code: %v", err, r.StatusCode))
+	if err != nil {
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get account transactions: %w", err))
+		return m
+	} else if r.StatusCode != http.StatusOK {
+		m.Errors = append(m.Errors, fmt.Errorf("invalid status code %v", r.StatusCode))
 		return m
 	}
 	defer r.Body.Close()

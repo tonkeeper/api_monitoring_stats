@@ -17,7 +17,12 @@ func workerMetrics(sources []metrics) {
 		go func(m metrics) {
 			for {
 				collect(m)
-				time.Sleep(time.Second * 30)
+				sleep := time.Second * 30
+				i, ok := m.(interface{ CheckInterval() time.Duration })
+				if ok {
+					sleep = i.CheckInterval()
+				}
+				time.Sleep(sleep)
 			}
 		}(s)
 		time.Sleep(time.Second * 2)

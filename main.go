@@ -36,6 +36,9 @@ func main() {
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 		public_config.NewLiteServersMetrics(),
 	}
+	if config.Config.GetBlockKey != "" {
+		sources = append(sources, Period(toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
+	}
 	go workerMetrics(sources)
 
 	for {

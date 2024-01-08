@@ -11,6 +11,7 @@ var ElectorAccountID = ton.MustParseAccountID("Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzM
 
 var Config = struct {
 	TonCenterApiToken string `env:"TONCENTER_API_TOKEN"`
+	GetBlockKey       string `env:"GETBLOCK_KEY"`
 	MetricsPort       int    `env:"METRICS_PORT" envDefault:"9010"`
 }{}
 
