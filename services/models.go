@@ -8,3 +8,13 @@ type ApiMetrics struct {
 	IndexingLatency float64
 	Errors          []error
 }
+
+type DAppMetrics struct {
+	ServiceName         string
+	MainPageLoadLatency float64
+	ApiLatency          float64
+	IndexationLatency   *float64
+	TotalChecks         int
+	SuccessChecks       int
+	Errors              []error
+}

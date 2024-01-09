@@ -29,3 +29,34 @@ var (
 		Help: "availability of http api",
 	}, []string{"service"})
 )
+
+var (
+	MetricDAppTimeHistogramVec = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "tonstatus_dapp_functions_time",
+			Help:    "DApp functions execution duration distribution in seconds",
+			Buckets: []float64{0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 2.5, 5, 10},
+		},
+		[]string{"dapp"})
+
+	MetricDAppMainPageLatency = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "tonstatus_dapp_main_page_time",
+			Buckets: []float64{0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 2.5, 5, 10},
+		},
+		[]string{"dapp"})
+
+	MetricDAppIndexingLatencyHistogramVec = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "tonstatus_dapp_indexing_latency",
+			Help:    "difference between current time and last transaction on electror",
+			Buckets: []float64{0.5, 1, 5, 7.5, 10, 12.5, 15, 17.5, 20, 25, 30, 60, 120, 300, 600, 1200, 3600},
+		},
+		[]string{"dapp"},
+	)
+
+	MetricDAppAvailability = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "tonstatus_dapp_availability",
+		Help: "availability of http api",
+	}, []string{"dapp"})
+)

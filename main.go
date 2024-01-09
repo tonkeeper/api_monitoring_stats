@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"api_monitoring_stats/config"
+	"api_monitoring_stats/services"
+	"api_monitoring_stats/services/dapps"
 	"api_monitoring_stats/services/dton"
 	public_config "api_monitoring_stats/services/public-config"
 	"api_monitoring_stats/services/tonapi"
@@ -27,7 +29,7 @@ func main() {
 			log.Fatalf("failed to start metrix server: %v", err)
 		}
 	}()
-	sources := []metrics{
+	apis := []metrics[services.ApiMetrics]{
 		tonapi.NewMonitoring(),
 		dton.NewMonitoring("dton", "https://dton.io/graphql"),
 		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
@@ -37,15 +39,18 @@ func main() {
 		public_config.NewLiteServersMetrics(),
 	}
 	if config.Config.GetBlockKey != "" {
-		sources = append(sources, Period(toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
+		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
 	}
-	go workerMetrics(sources)
+
+	dappsMetrics := []metrics[services.DAppMetrics]{
+		dapps.NewDeDust(),
+		dapps.NewStonFi(),
+	}
+
+	go workerMetrics(apis, apiMetricsCollect)
+	go workerMetrics(dappsMetrics, dappsMetricsCollect)
 
 	for {
 		time.Sleep(time.Hour)
 	}
 }
-
-//todo:
-//curl 'https://api.dedust.io/v2/routing/plan'-X POST -H 'content-type: application/json'   --data-raw '{"from":"native","to":"jetton:0:65aac9b5e380eae928db3c8e238d9bc0d61a9320fdc2bc7a2f6c87d6fedf9208","amount":"1000000000"}'
-//curl 'https://rpc.ston.fi/' --compressed -X POST -H 'Content-Type: application/json'  --data-raw '{"jsonrpc":"2.0","id":7,"method":"dex.simulate_swap","params":{"offer_address":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c","offer_units":"1000000000","ask_address":"EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO","slippage_tolerance":"0.001"}}'

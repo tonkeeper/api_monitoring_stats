@@ -8,15 +8,15 @@ import (
 	"api_monitoring_stats/services"
 )
 
-type metrics interface {
-	GetMetrics(ctx context.Context) services.ApiMetrics
+type metrics[T services.DAppMetrics | services.ApiMetrics] interface {
+	GetMetrics(ctx context.Context) T
 }
 
-func workerMetrics(sources []metrics) {
+func workerMetrics[T services.ApiMetrics | services.DAppMetrics](sources []metrics[T], f func(m T)) {
 	for _, s := range sources {
-		go func(m metrics) {
+		go func(m metrics[T]) {
 			for {
-				collect(m)
+				collect(m, f)
 				sleep := time.Second * 30
 				i, ok := m.(interface{ CheckInterval() time.Duration })
 				if ok {
@@ -29,15 +29,29 @@ func workerMetrics(sources []metrics) {
 	}
 }
 
-func collect(s metrics) {
+func collect[T services.ApiMetrics | services.DAppMetrics](s metrics[T], f func(m T)) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	m := s.GetMetrics(ctx)
+	f(m)
+}
+
+func apiMetricsCollect(m services.ApiMetrics) {
 	MetricServiceTimeHistogramVec.WithLabelValues(m.ServiceName).Observe(m.HttpsLatency)
 	MetricServiceIndexingLatencyHistogramVec.WithLabelValues(m.ServiceName).Observe(m.IndexingLatency)
-
 	MetricServiceRequest.WithLabelValues(m.ServiceName).Set(float64(m.SuccessChecks) / float64(m.TotalChecks))
+	for _, err := range m.Errors {
+		fmt.Println("Service", m.ServiceName, err.Error())
+	}
+}
 
+func dappsMetricsCollect(m services.DAppMetrics) {
+	MetricDAppAvailability.WithLabelValues(m.ServiceName).Set(float64(m.SuccessChecks) / float64(m.TotalChecks))
+	MetricDAppMainPageLatency.WithLabelValues(m.ServiceName).Observe(m.MainPageLoadLatency)
+	MetricDAppTimeHistogramVec.WithLabelValues(m.ServiceName).Observe(m.ApiLatency)
+	if m.IndexationLatency != nil {
+		MetricDAppIndexingLatencyHistogramVec.WithLabelValues(m.ServiceName).Observe(*m.IndexationLatency)
+	}
 	for _, err := range m.Errors {
 		fmt.Println("Service", m.ServiceName, err.Error())
 	}
