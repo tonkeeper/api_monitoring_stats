@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -8,10 +9,15 @@ import (
 	"time"
 )
 
-func HttpGet(totalChecks, successChecks *int, errors *[]error, url string, respObject any) float64 {
+func HttpGet(ctx context.Context, totalChecks, successChecks *int, errors *[]error, url string, respObject any) float64 {
 	*totalChecks += 1
 	t := time.Now()
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		*errors = append(*errors, fmt.Errorf("can't create request to %v: %w", url, err))
+		return 0
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		*errors = append(*errors, fmt.Errorf("can't get %v: %w", url, err))
 		return 0
@@ -32,10 +38,16 @@ func HttpGet(totalChecks, successChecks *int, errors *[]error, url string, respO
 	return time.Since(t).Seconds()
 }
 
-func HttpPost(totalChecks, successChecks *int, errors *[]error, url string, body io.Reader, respObject any) float64 {
+func HttpPost(ctx context.Context, totalChecks, successChecks *int, errors *[]error, url string, body io.Reader, respObject any) float64 {
 	*totalChecks += 1
 	t := time.Now()
-	resp, err := http.Post(url, "application/json", body)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
+	req.Header.Add("Content-Type", "application/json")
+	if err != nil {
+		*errors = append(*errors, fmt.Errorf("can't create request to %v: %w", url, err))
+		return 0
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		*errors = append(*errors, fmt.Errorf("can't post %v: %w", url, err))
 		return 0

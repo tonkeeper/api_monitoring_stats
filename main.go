@@ -43,8 +43,9 @@ func main() {
 	}
 
 	dappsMetrics := []metrics[services.DAppMetrics]{
-		dapps.NewDeDust(),
-		dapps.NewStonFi(),
+		dapps.DeDust,
+		dapps.StonFi,
+		dapps.Getgems,
 	}
 
 	go workerMetrics(apis, apiMetricsCollect)
