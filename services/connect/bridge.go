@@ -48,12 +48,12 @@ func (b *Bridge) GetMetrics(ctx context.Context) services.BridgeMetrics {
 	if !b.connected {
 		return m
 	}
+	t := time.Now()
 	payload := randString()
-	resp, err := http.Post(fmt.Sprintf("%s/message?client_id=%s&to=%s&ttl=30", b.url, randString(), b.id), "text/plain", strings.NewReader(payload))
+	resp, err := http.Post(fmt.Sprintf("%s/message?client_id=%s&to=%s&ttl=300", b.url, randString(), b.id), "text/plain", strings.NewReader(payload))
 	if err != nil || resp.StatusCode != 200 {
 		return m
 	}
-	t := time.Now()
 
 	timer := time.NewTimer(time.Second * 10)
 external:

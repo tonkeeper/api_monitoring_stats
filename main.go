@@ -51,7 +51,7 @@ func main() {
 	bridges := []metrics[services.BridgeMetrics]{
 		connect.NewBridge("tonapi", "https://bridge.tonapi.io/bridge"),
 		connect.NewBridge("MTW", "https://tonconnectbridge.mytonwallet.org/bridge"),
-		//connect.NewBridge("tonhub", "https://connect.tonhubapi.com/tonconnect"),
+		connect.NewBridge("tonhub", "https://connect.tonhubapi.com/tonconnect"),
 	}
 	go workerMetrics(apis, apiMetricsCollect)
 	go workerMetrics(dappsMetrics, dappsMetricsCollect)
