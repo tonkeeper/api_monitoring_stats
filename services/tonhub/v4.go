@@ -50,8 +50,12 @@ func (vm *V4Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 
 	t := time.Now()
 	r, err = http.Get(fmt.Sprintf("%v/block/%v/%v", vm.prefix, block.Last.Seqno, config.ElectorAccountID.ToHuman(true, false)))
-	if err != nil || r.StatusCode != http.StatusOK {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w, status code: %v", err, r.StatusCode))
+	if err != nil {
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get account state: %w", err))
+		return m
+	} else if r.StatusCode != http.StatusOK {
+		m.Errors = append(m.Errors, fmt.Errorf("invalid status code %v", r.StatusCode))
+		return m
 	} else {
 		m.SuccessChecks++
 	}
