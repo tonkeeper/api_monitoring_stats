@@ -18,3 +18,12 @@ type DAppMetrics struct {
 	SuccessChecks       int
 	Errors              []error
 }
+
+type BridgeMetrics struct {
+	ServiceName     string
+	TotalChecks     int
+	SuccessChecks   int
+	Errors          []error
+	TransferLatency float64
+	Reconnects      int
+}

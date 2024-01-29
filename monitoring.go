@@ -60,3 +60,16 @@ var (
 		Help: "availability of http api",
 	}, []string{"dapp"})
 )
+
+var (
+	metricBridgeAvailability = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "tonconnect_bridge_availability",
+	}, []string{"bridge"})
+	metricBridgeLatencyHistogramVec = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "tonconnect_bridge_latency",
+		Buckets: []float64{0.01, 0.05, 0.1, 0.5, 1, 5, 10},
+	}, []string{"bridge"})
+	metricBridgeReconnects = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "tonconnect_bridge_reconnects",
+	}, []string{"bridge"})
+)

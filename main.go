@@ -8,6 +8,7 @@ import (
 
 	"api_monitoring_stats/config"
 	"api_monitoring_stats/services"
+	"api_monitoring_stats/services/connect"
 	"api_monitoring_stats/services/dapps"
 	"api_monitoring_stats/services/dton"
 	public_config "api_monitoring_stats/services/public-config"
@@ -47,10 +48,14 @@ func main() {
 		dapps.StonFi,
 		dapps.Getgems,
 	}
-
+	bridges := []metrics[services.BridgeMetrics]{
+		connect.NewBridge("tonapi", "https://bridge.tonapi.io/bridge"),
+		connect.NewBridge("MTW", "https://tonconnectbridge.mytonwallet.org/bridge"),
+		//connect.NewBridge("tonhub", "https://connect.tonhubapi.com/tonconnect"),
+	}
 	go workerMetrics(apis, apiMetricsCollect)
 	go workerMetrics(dappsMetrics, dappsMetricsCollect)
-
+	go workerMetrics(bridges, bridgeMetricsCollect)
 	for {
 		time.Sleep(time.Hour)
 	}

@@ -8,11 +8,12 @@ import (
 	"api_monitoring_stats/services"
 )
 
-type metrics[T services.DAppMetrics | services.ApiMetrics] interface {
+type metrics[T services.DAppMetrics | services.ApiMetrics | services.BridgeMetrics] interface {
 	GetMetrics(ctx context.Context) T
 }
 
-func workerMetrics[T services.ApiMetrics | services.DAppMetrics](sources []metrics[T], f func(m T)) {
+func workerMetrics[T services.ApiMetrics | services.DAppMetrics | services.BridgeMetrics](sources []metrics[T], f func(m T)) {
+	time.Sleep(time.Second)
 	for _, s := range sources {
 		go func(m metrics[T]) {
 			for {
@@ -29,7 +30,7 @@ func workerMetrics[T services.ApiMetrics | services.DAppMetrics](sources []metri
 	}
 }
 
-func collect[T services.ApiMetrics | services.DAppMetrics](s metrics[T], f func(m T)) {
+func collect[T services.ApiMetrics | services.DAppMetrics | services.BridgeMetrics](s metrics[T], f func(m T)) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	m := s.GetMetrics(ctx)
@@ -52,6 +53,15 @@ func dappsMetricsCollect(m services.DAppMetrics) {
 	if m.IndexationLatency != nil {
 		MetricDAppIndexingLatencyHistogramVec.WithLabelValues(m.ServiceName).Observe(*m.IndexationLatency)
 	}
+	for _, err := range m.Errors {
+		fmt.Println("Service", m.ServiceName, err.Error())
+	}
+}
+
+func bridgeMetricsCollect(m services.BridgeMetrics) {
+	metricBridgeAvailability.WithLabelValues(m.ServiceName).Set(float64(m.SuccessChecks) / float64(m.TotalChecks))
+	metricBridgeReconnects.WithLabelValues(m.ServiceName).Set(float64(m.Reconnects))
+	metricBridgeLatencyHistogramVec.WithLabelValues(m.ServiceName).Observe(m.TransferLatency)
 	for _, err := range m.Errors {
 		fmt.Println("Service", m.ServiceName, err.Error())
 	}
