@@ -30,7 +30,7 @@ func (vm *V4Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m.TotalChecks++
 	r, err := http.Get(vm.prefix + "/block/latest")
 	if err != nil {
-		m.Errors = append(m.Errors, fmt.Errorf("failed to get latest block: %w, status code: %v", err, r.StatusCode))
+		m.Errors = append(m.Errors, fmt.Errorf("failed to get latest block: %w", err))
 		return m
 	} else if r.StatusCode != http.StatusOK {
 		m.Errors = append(m.Errors, fmt.Errorf("invalid status code %v", r.StatusCode))
