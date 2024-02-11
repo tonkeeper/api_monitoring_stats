@@ -1,22 +1,25 @@
 package public_config
 
 import (
-	"api_monitoring_stats/config"
-	"api_monitoring_stats/services"
 	"context"
 	"fmt"
+	"time"
+
+	"api_monitoring_stats/config"
+	"api_monitoring_stats/services"
 	"github.com/xssnick/tonutils-go/address"
 	"github.com/xssnick/tonutils-go/liteclient"
 	"github.com/xssnick/tonutils-go/ton"
-	"time"
 )
 
 type LiteServersMetrics struct {
-	client *ton.APIClient
+	client  *ton.APIClient
+	name    string
+	servers []liteclient.LiteserverConfig
 }
 
-func NewLiteServersMetrics() *LiteServersMetrics {
-	l := &LiteServersMetrics{}
+func NewLiteServersMetrics(name string, servers []liteclient.LiteserverConfig) *LiteServersMetrics {
+	l := &LiteServersMetrics{name: name, servers: servers}
 	go func() {
 		for l.client == nil {
 			err := l.connect()
@@ -30,8 +33,15 @@ func NewLiteServersMetrics() *LiteServersMetrics {
 
 func (lm *LiteServersMetrics) connect() error {
 	pool := liteclient.NewConnectionPool()
-	configUrl := "https://api.tontech.io/ton/wallet-mainnet.autoconf.json"
-	err := pool.AddConnectionsFromConfigUrl(context.Background(), configUrl)
+	ctx := context.Background()
+	c, err := liteclient.GetConfigFromUrl(ctx, "https://api.tontech.io/ton/wallet-mainnet.autoconf.json")
+	if err != nil {
+		return err
+	}
+	if len(lm.servers) != 0 {
+		c.Liteservers = lm.servers
+	}
+	err = pool.AddConnectionsFromConfig(ctx, c)
 	if err != nil {
 		return err
 	}
@@ -43,7 +53,7 @@ func (lm *LiteServersMetrics) connect() error {
 
 func (lm *LiteServersMetrics) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m := services.ApiMetrics{
-		ServiceName: "public liteservers",
+		ServiceName: lm.name,
 	}
 
 	m.TotalChecks++

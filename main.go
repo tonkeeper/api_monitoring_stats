@@ -37,10 +37,13 @@ func main() {
 		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
 		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
-		public_config.NewLiteServersMetrics(),
+		public_config.NewLiteServersMetrics("public liteservers", nil),
 	}
 	if config.Config.GetBlockKey != "" {
 		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
+	}
+	if config.Config.DtonLiteServers != nil {
+		apis = append(apis, public_config.NewLiteServersMetrics("liteservers_bot", config.Config.DtonLiteServers))
 	}
 
 	dappsMetrics := []metrics[services.DAppMetrics]{
