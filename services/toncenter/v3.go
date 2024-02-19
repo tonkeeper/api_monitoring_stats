@@ -57,18 +57,20 @@ func (vm *V3Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 		return m
 	}
 	defer r.Body.Close()
-	var result []struct {
-		Now int64 `json:"now"`
+	var result struct {
+		Transactions []struct {
+			Now int64 `json:"now"`
+		}
 	}
 	if err = json.NewDecoder(r.Body).Decode(&result); err != nil {
 		m.Errors = append(m.Errors, fmt.Errorf("failed to decode response body: %w", err))
 		return m
 	}
-	if len(result) == 0 {
+	if len(result.Transactions) == 0 {
 		m.Errors = append(m.Errors, fmt.Errorf("no transactions found"))
 		return m
 	}
 	m.SuccessChecks++
-	m.IndexingLatency = float64(time.Now().Unix() - result[0].Now)
+	m.IndexingLatency = float64(time.Now().Unix() - result.Transactions[0].Now)
 	return m
 }
