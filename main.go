@@ -56,6 +56,7 @@ func main() {
 		connect.NewBridge("MTW", "https://tonconnectbridge.mytonwallet.org/bridge"),
 		connect.NewBridge("tonhub", "https://connect.tonhubapi.com/tonconnect"),
 		connect.NewBridge("TonSpace", "https://bridge.ton.space/bridge"),
+		connect.NewBridge("DeWallet", "https://sse-bridge.delab.team/bridge"),
 	}
 	go workerMetrics(apis, apiMetricsCollect)
 	go workerMetrics(dappsMetrics, dappsMetricsCollect)
