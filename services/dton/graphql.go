@@ -35,7 +35,7 @@ func (m *Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	}
 	start := time.Now()
 	metrics.TotalChecks++
-	query := fmt.Sprintf(`{account_states(account: {address_friendly: "%v"}) {account_storage_balance_grams}}`, config.ElectorAccountID.ToHuman(true, false))
+	query := fmt.Sprintf(`{raw_account_states(account: {address_friendly: "%v"}) {account_storage_balance_grams}}`, config.ElectorAccountID.ToHuman(true, false))
 	body, _ := json.Marshal(graphQLQuery{Query: query})
 	if _, err := sendRequest(m.prefix, body); err != nil {
 		metrics.Errors = append(metrics.Errors, fmt.Errorf("failed to get account state: %w", err))
@@ -45,7 +45,7 @@ func (m *Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	metrics.HttpsLatency = time.Since(start).Seconds()
 
 	metrics.TotalChecks++
-	query = fmt.Sprintf(`{transactions(order_desc: true, page_size: 1, address_friendly: "%v"){gen_utime}}`, config.ElectorAccountID.ToHuman(true, false))
+	query = fmt.Sprintf(`{raw_transactions(order_desc: true, page_size: 1, address_friendly: "%v"){gen_utime}}`, config.ElectorAccountID.ToHuman(true, false))
 	body, _ = json.Marshal(graphQLQuery{Query: query})
 	responseBody, err := sendRequest(m.prefix, body)
 	if err != nil {
