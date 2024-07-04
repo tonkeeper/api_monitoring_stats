@@ -56,7 +56,7 @@ func (m *Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 		Data struct {
 			Transactions []struct {
 				GenUtime string `json:"gen_utime"`
-			} `json:"transactions"`
+			} `json:"raw_transactions"`
 		} `json:"data"`
 	}
 	if err = json.Unmarshal(responseBody, &result); err != nil {
