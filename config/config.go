@@ -21,6 +21,7 @@ var Config = struct {
 	GetBlockKey       string                        `env:"GETBLOCK_KEY"`
 	MetricsPort       int                           `env:"METRICS_PORT" envDefault:"9010"`
 	DtonLiteServers   []liteclient.LiteserverConfig `env:"DTON_LITE_SERVERS"`
+	DtonToken         string                        `env:"DTONTOKEN"`
 }{}
 
 func LoadConfig() {
