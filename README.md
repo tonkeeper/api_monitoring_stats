@@ -15,4 +15,5 @@ docker compose up -d --build
 If you want to avoid toncenters error please add toncenter token before running `docker compose up`
 ```shell
 echo  TONCENTER_API_TOKEN=<token> > .env
+echo  TONX_API_TOKEN=<token> > .env
 ```

@@ -15,6 +15,7 @@ import (
 	"api_monitoring_stats/services/tonapi"
 	"api_monitoring_stats/services/toncenter"
 	"api_monitoring_stats/services/tonhub"
+	"api_monitoring_stats/services/tonxapi"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -39,6 +40,10 @@ func main() {
 		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 		public_config.NewLiteServersMetrics("public liteservers", nil),
+		tonxapi.NewTonXAPIMonitoring(
+			"TonXAPI",
+			"https://mainnet-rpc.tonxapi.com/v2/json-rpc",
+		),
 	}
 	if config.Config.GetBlockKey != "" {
 		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
