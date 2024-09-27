@@ -41,7 +41,7 @@ func main() {
 		tonhub.NewV4Monitoring("tonhub", "https://mainnet-v4.tonhubapi.com"),
 		public_config.NewLiteServersMetrics("public liteservers", nil),
 		tonxapi.NewTonXAPIMonitoring(
-			"TonXAPI",
+			"TONX API",
 			"https://mainnet-rpc.tonxapi.com/v2/json-rpc",
 		),
 	}
