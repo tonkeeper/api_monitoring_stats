@@ -99,7 +99,7 @@ func (b *Bridge) connect() {
 				if err.Error() == "unexpected newline" {
 					continue
 				}
-				fmt.Println(err)
+				fmt.Println("bridge", b.name, err)
 				b.connected = false
 				b.reconnectCounter++
 				break
