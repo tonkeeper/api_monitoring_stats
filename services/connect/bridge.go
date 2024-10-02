@@ -86,6 +86,7 @@ func (b *Bridge) connect() {
 		resp, err := http.Get(b.url + "/events?client_id=" + b.id)
 		if err != nil || resp.StatusCode != 200 {
 			b.connected = false
+			fmt.Println("bridge", b.name, "can't connect", err)
 			time.Sleep(time.Second * 10)
 			continue
 		} else {
