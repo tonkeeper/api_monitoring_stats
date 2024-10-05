@@ -34,7 +34,7 @@ func main() {
 	}()
 	apis := []metrics[services.ApiMetrics]{
 		tonapi.NewMonitoring(),
-		dton.NewMonitoring("dton", "https://dton.io/"+config.Config.DtonToken+"/graphql_private"),
+		dton.NewMonitoring("dton", "https://dton.co/"+config.Config.DtonToken+"/graphql_private"),
 		toncenter.NewV2Monitoring("toncenter.com v2", "https://toncenter.com/api/v2"),
 		toncenter.NewV3Monitoring("toncenter.com v3", "https://toncenter.com/api/v3"),
 		toncenter.NewV2Monitoring("orbs http-api", "https://ton.access.orbs.network/route/1/mainnet/toncenter-api-v2"),
