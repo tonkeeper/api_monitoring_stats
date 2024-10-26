@@ -44,6 +44,8 @@ func main() {
 			"TonXAPI",
 			"https://mainnet-rpc.tonxapi.com/v2/json-rpc",
 		),
+		toncenter.NewV2Monitoring("chainstack.com v2", "https://ton-mainnet.core.chainstack.com/"+config.Config.ChainstackToken+"/api/v2"),
+		toncenter.NewV3Monitoring("chainstack.com v3", "https://ton-mainnet.core.chainstack.com/"+config.Config.ChainstackToken+"/api/v3"),
 	}
 	if config.Config.GetBlockKey != "" {
 		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey), time.Minute))
