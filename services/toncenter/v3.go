@@ -14,12 +14,14 @@ import (
 type V3Monitoring struct {
 	name   string
 	prefix string
+	token  string
 }
 
-func NewV3Monitoring(name, prefix string) *V3Monitoring {
+func NewV3Monitoring(name, prefix, token string) *V3Monitoring {
 	return &V3Monitoring{
 		name:   name,
 		prefix: prefix,
+		token:  token,
 	}
 }
 
@@ -30,8 +32,8 @@ func (vm *V3Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m.TotalChecks++
 	t := time.Now()
 	url := fmt.Sprintf("%v/account?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
-	if config.Config.TonCenterApiToken != "" {
-		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	if vm.token != "" {
+		url += fmt.Sprintf("&api_key=%v", vm.token)
 	}
 	r, err := http.Get(url)
 	if err != nil {
@@ -45,8 +47,8 @@ func (vm *V3Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m.TotalChecks++
 
 	url = fmt.Sprintf("%v/transactions?account=%v&limit=1", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
-	if config.Config.TonCenterApiToken != "" {
-		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	if vm.token != "" {
+		url += fmt.Sprintf("&api_key=%v", vm.token)
 	}
 	r, err = http.Get(url)
 	if err != nil || r.StatusCode != http.StatusOK {

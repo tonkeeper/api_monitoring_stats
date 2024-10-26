@@ -14,12 +14,14 @@ import (
 type V2Monitoring struct {
 	name   string
 	prefix string
+	token  string
 }
 
-func NewV2Monitoring(name, prefix string) *V2Monitoring {
+func NewV2Monitoring(name, prefix, token string) *V2Monitoring {
 	return &V2Monitoring{
 		name:   name,
 		prefix: prefix,
+		token:  token,
 	}
 }
 
@@ -30,8 +32,8 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m.TotalChecks++
 	t := time.Now()
 	url := fmt.Sprintf("%v/getAddressInformation?address=%v", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
-	if config.Config.TonCenterApiToken != "" {
-		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	if vm.token != "" {
+		url += fmt.Sprintf("&api_key=%v", vm.token)
 	}
 	r, err := http.Get(url)
 	if err != nil {
@@ -45,8 +47,8 @@ func (vm *V2Monitoring) GetMetrics(ctx context.Context) services.ApiMetrics {
 	m.TotalChecks++
 
 	url = fmt.Sprintf("%v/getTransactions?address=%v&limit=1&to_lt=0&archival=false", vm.prefix, config.ElectorAccountID.ToHuman(true, false))
-	if config.Config.TonCenterApiToken != "" {
-		url += fmt.Sprintf("&api_key=%v", config.Config.TonCenterApiToken)
+	if vm.token != "" {
+		url += fmt.Sprintf("&api_key=%v", vm.token)
 	}
 	r, err = http.Get(url)
 	if err != nil {
