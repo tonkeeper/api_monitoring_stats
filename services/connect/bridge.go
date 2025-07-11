@@ -1,11 +1,14 @@
 package connect
 
 import (
+	"bufio"
 	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -86,32 +89,30 @@ func (b *Bridge) connect() {
 		resp, err := http.Get(b.url + "/events?client_id=" + b.id)
 		if err != nil || resp.StatusCode != 200 {
 			b.connected = false
-			fmt.Println("bridge", b.name, "can't connect", err)
+			fmt.Printf("bridge %s can't connect: %v\n", b.name, err)
 			time.Sleep(time.Second * 10)
 			continue
-		} else {
-			b.connected = true
 		}
-		for {
-			var event string
-			var data string
-			_, err := fmt.Fscanf(resp.Body, "%s %s", &event, &data)
-			if err != nil {
-				if err.Error() == "unexpected newline" {
-					continue
-				}
-				fmt.Println("bridge", b.name, err)
-				b.connected = false
-				b.reconnectCounter++
-				break
-			}
-			if event == "data:" {
+		b.connected = true
+		scanner := bufio.NewScanner(resp.Body)
+		for scanner.Scan() {
+			line := scanner.Text()
+			if strings.HasPrefix(line, "data:") {
+				data := strings.TrimPrefix(line, "data: ")
 				select {
 				case b.data <- data:
 				default:
-
 				}
 			}
+		}
+		if err = scanner.Err(); err != nil {
+			fmt.Printf("bridge %s error: %v\n", b.name, err)
+			b.connected = false
+			b.reconnectCounter++
+		}
+		if errors.Is(err, io.ErrUnexpectedEOF) {
+			time.Sleep(time.Second)
+			continue
 		}
 		time.Sleep(time.Second * 10)
 	}
