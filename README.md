@@ -15,6 +15,5 @@ docker compose up -d --build
 If you want to avoid errors, please add the following tokens before running `docker compose up`
 ```shell
 echo  TONCENTER_API_TOKEN=<token> > .env
-echo  TONX_API_TOKEN=<token> > .env
 echo  CHAINSTACK_TOKEN=<token> > .env
 ```
