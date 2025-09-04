@@ -15,6 +15,7 @@ import (
 	"api_monitoring_stats/services/tonapi"
 	"api_monitoring_stats/services/toncenter"
 	"api_monitoring_stats/services/tonhub"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -44,7 +45,7 @@ func main() {
 		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV3Monitoring("chainstack.com v3", "https://ton-mainnet.core.chainstack.com/"+config.Config.ChainstackToken+"/api/v3", ""), time.Minute))
 	}
 	if config.Config.GetBlockKey != "" {
-		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey, ""), time.Minute))
+		apis = append(apis, Period[services.ApiMetrics](toncenter.NewV2Monitoring("getblock.io", "https://go.getblock.io/"+config.Config.GetBlockKey, ""), time.Minute*4))
 	}
 	if config.Config.DtonLiteServers != nil {
 		apis = append(apis, public_config.NewLiteServersMetrics("liteservers_bot", config.Config.DtonLiteServers))
