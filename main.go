@@ -55,6 +55,7 @@ func main() {
 		dapps.DeDust,
 		dapps.StonFi,
 		dapps.Getgems,
+		dapps.Marketapp,
 	}
 	bridges := []metrics[services.BridgeMetrics]{
 		connect.NewBridge("tonapi", "https://bridge.tonapi.io/bridge"),
