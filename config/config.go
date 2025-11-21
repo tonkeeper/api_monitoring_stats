@@ -23,6 +23,7 @@ var Config = struct {
 	DtonLiteServers   []liteclient.LiteserverConfig `env:"DTON_LITE_SERVERS"`
 	DtonToken         string                        `env:"DTONTOKEN"`
 	ChainstackToken   string                        `env:"CHAINSTACK_TOKEN"`
+	WalletListUrl     string                        `env:"WALLET_LIST_URL"`
 }{}
 
 func LoadConfig() {
