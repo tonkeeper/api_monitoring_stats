@@ -1,4 +1,4 @@
-FROM golang:1.21 AS gobuild
+FROM golang:1.24 AS gobuild
 WORKDIR /build-dir
 COPY go.mod .
 COPY go.sum .
