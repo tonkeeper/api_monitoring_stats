@@ -34,7 +34,7 @@ func NewLiteServersMetrics(name string, servers []liteclient.LiteserverConfig) *
 func (lm *LiteServersMetrics) connect() error {
 	pool := liteclient.NewConnectionPool()
 	ctx := context.Background()
-	c, err := liteclient.GetConfigFromUrl(ctx, "https://api.tontech.io/ton/wallet-mainnet.autoconf.json")
+	c, err := liteclient.GetConfigFromUrl(ctx, "https://ton.org/global.config.json")
 	if err != nil {
 		return err
 	}
