@@ -19,7 +19,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_indexing_latency",
 			Help:    "difference between current time and last transaction on electror",
-			Buckets: []float64{0.5, 1, 5, 7.5, 10, 12.5, 15, 17.5, 20, 25, 30, 60, 120, 300, 600, 1200, 3600},
+			Buckets: []float64{0.5, 1, 2, 3, 4, 5, 7.5, 10, 15, 20, 30, 60, 120, 300, 1200, 3600},
 		},
 		[]string{"service"},
 	)
@@ -67,7 +67,7 @@ var (
 	}, []string{"bridge"})
 	metricBridgeLatencyHistogramVec = promauto.NewHistogramVec(prometheus.HistogramOpts{
 		Name:    "tonconnect_bridge_latency",
-		Buckets: []float64{0.01, 0.05, 0.1, 0.25, 0.5, 1,2, 5, 10},
+		Buckets: []float64{0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10},
 	}, []string{"bridge"})
 	metricBridgeReconnects = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "tonconnect_bridge_reconnects",
