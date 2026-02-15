@@ -28,6 +28,15 @@ var (
 		Name: "tonstatus_http_api",
 		Help: "availability of http api",
 	}, []string{"service"})
+
+	MetricTxPropagationLatency = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "tonstatus_tx_propagation_latency_seconds",
+			Help:    "Time from tx sent to network until it appeared in the API",
+			Buckets: []float64{0.5, 1, 2, 3, 5, 7, 10, 15, 20, 30, 45, 60, 90, 120},
+		},
+		[]string{"service"},
+	)
 )
 
 var (

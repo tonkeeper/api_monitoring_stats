@@ -27,3 +27,9 @@ type BridgeMetrics struct {
 	TransferLatency float64
 	Reconnects      int
 }
+
+type TxPropagationMetrics struct {
+	ServiceName string
+	Latency     float64
+	Errors      []error
+}
