@@ -428,7 +428,7 @@
           "refId": "A"
         }
       ],
-      "title": "Tx propagation latency",
+      "title": "Tx propagation latency (testnet)",
       "type": "heatmap"
     }
   ],
