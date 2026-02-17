@@ -53,13 +53,17 @@ func (r *Runner) Run(ctx context.Context) (latencies map[string]float64, err err
 	if err != nil {
 		return nil, fmt.Errorf("liteapi client: %w", err)
 	}
+	networkID, err := cli.GetNetworkGlobalID(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("get network global id: %w", err)
+	}
 
 	privateKey, err := wallet.SeedToPrivateKey(r.Seed)
 	if err != nil {
 		return nil, fmt.Errorf("seed: %w", err)
 	}
 
-	w, err := wallet.New(privateKey, wallet.V3R2, 0, nil, cli)
+	w, err := wallet.New(privateKey, wallet.V5R1, nil, wallet.WithNetworkGlobalID(networkID))
 	if err != nil {
 		return nil, fmt.Errorf("wallet: %w", err)
 	}
