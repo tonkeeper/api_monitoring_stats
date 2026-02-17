@@ -15,6 +15,7 @@ import (
 	"api_monitoring_stats/services/tonapi"
 	"api_monitoring_stats/services/toncenter"
 	"api_monitoring_stats/services/tonhub"
+	"api_monitoring_stats/services/txpropagation"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -66,7 +67,43 @@ func main() {
 	go workerMetrics(apis, apiMetricsCollect)
 	go workerMetrics(dappsMetrics, dappsMetricsCollect)
 	go workerMetrics(bridges, bridgeMetricsCollect)
+
+	if config.Config.TxTimingSeed != "" {
+		txPropagationInterval := time.Duration(config.Config.TxTimingCheckMinutes) * time.Minute
+		txPropagationSources := []metrics[services.TxPropagationMetrics]{
+			buildTxPropagationRunner(txPropagationInterval),
+		}
+		go workerMetrics(txPropagationSources, txPropagationCollect)
+	}
+
 	for {
 		time.Sleep(time.Hour)
+	}
+}
+
+func buildTxPropagationRunner(interval time.Duration) *txpropagation.Runner {
+	useTestnet := config.Config.TxTimingNetwork == "testnet"
+	checkers := []txpropagation.Checker{
+		&txpropagation.TonapiSSEChecker{
+			ServiceName: "tonapi-sse",
+			BaseURL:     "https://rt-testnet.tonapi.io",
+			APIKey:      config.Config.TonapiSSEApiKey,
+		},
+		&txpropagation.TonapiChecker{
+			ServiceName: "tonapi",
+			BaseURL:     "https://testnet.tonapi.io",
+			APIKey:      "",
+		},
+		&txpropagation.ToncenterChecker{
+			ServiceName: "testnet.toncenter.com",
+			Prefix:      "https://testnet.toncenter.com/api/v3",
+			Token:       config.Config.TonCenterApiToken,
+		},
+	}
+	return &txpropagation.Runner{
+		Seed:       config.Config.TxTimingSeed,
+		UseTestnet: useTestnet,
+		Checkers:   checkers,
+		Interval:   interval,
 	}
 }

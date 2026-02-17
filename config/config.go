@@ -23,6 +23,11 @@ var Config = struct {
 	DtonLiteServers   []liteclient.LiteserverConfig `env:"DTON_LITE_SERVERS"`
 	DtonToken         string                        `env:"DTONTOKEN"`
 	ChainstackToken   string                        `env:"CHAINSTACK_TOKEN"`
+
+	TxTimingSeed         string `env:"TX_TIMING_SEED"`
+	TxTimingNetwork      string `env:"TX_TIMING_NETWORK" envDefault:"testnet"`
+	TxTimingCheckMinutes int    `env:"TX_TIMING_CHECK_MINUTES" envDefault:"20"`
+	TonapiSSEApiKey      string `env:"TONAPI_SSE_API_KEY"`
 }{}
 
 func LoadConfig() {
