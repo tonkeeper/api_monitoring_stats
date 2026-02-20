@@ -71,8 +71,13 @@ func bridgeMetricsCollect(m services.BridgeMetrics) {
 }
 
 func txPropagationCollect(m services.TxPropagationMetrics) {
-	MetricTxPropagationLatency.WithLabelValues(m.ServiceName).Observe(m.Latency)
+	for service, sec := range m.Latencies {
+		fmt.Println("TxPropagation", service, sec)
+		MetricTxPropagationLatency.WithLabelValues(service).Observe(sec)
+	}
 	for _, err := range m.Errors {
-		fmt.Println("Service", m.ServiceName, err.Error())
+		if err != nil {
+			fmt.Println("TxPropagation", err.Error())
+		}
 	}
 }

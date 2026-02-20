@@ -29,7 +29,6 @@ type BridgeMetrics struct {
 }
 
 type TxPropagationMetrics struct {
-	ServiceName string
-	Latency     float64
-	Errors      []error
+	Latencies map[string]float64 // service -> seconds until tx appeared
+	Errors    []error
 }

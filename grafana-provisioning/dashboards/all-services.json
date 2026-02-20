@@ -382,7 +382,7 @@
         "color": {
           "exponent": 0.5,
           "fill": "dark-orange",
-          "max": 120,
+          "max": 15,
           "mode": "scheme",
           "reverse": false,
           "scale": "exponential",
@@ -420,10 +420,10 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "histogram_quantile(0.95, sum(rate(tonstatus_tx_propagation_latency_seconds_bucket[$__rate_interval])) by (le, service))",
+          "expr": "sum(rate(tonstatus_tx_propagation_latency_seconds_sum[10m])) by (service)/sum(rate(tonstatus_tx_propagation_latency_seconds_count[10m])) by (service)",
           "format": "time_series",
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{service}}",
           "range": true,
           "refId": "A"
         }

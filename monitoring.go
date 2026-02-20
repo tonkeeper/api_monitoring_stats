@@ -33,7 +33,7 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "tonstatus_tx_propagation_latency_seconds",
 			Help:    "Time from tx sent to network until it appeared in the API",
-			Buckets: []float64{0.5, 1, 2, 3, 5, 7, 10, 15, 20, 30, 45, 60, 90, 120},
+			Buckets: []float64{0.1, 0.5, 1, 2, 3, 5, 6, 7, 8, 9, 10},
 		},
 		[]string{"service"},
 	)

@@ -27,7 +27,7 @@ func (r *Runner) GetMetrics(ctx context.Context) services.TxPropagationMetrics {
 	if err != nil {
 		return services.TxPropagationMetrics{Errors: []error{err}}
 	}
-	return services.TxPropagationMetrics{ServiceName: "tx-propagation", Latency: latencies["liteserver"], Errors: []error{err}}
+	return services.TxPropagationMetrics{Latencies: latencies, Errors: nil}
 }
 
 func (r *Runner) CheckInterval() time.Duration {
@@ -41,9 +41,8 @@ func (r *Runner) Timeout() time.Duration {
 	return 1 * time.Minute
 }
 
-// Run sends one tx and returns latency per service (seconds). Checkers are run in parallel.
-func (r *Runner) Run(ctx context.Context) (latencies map[string]float64, err error) {
-	latencies = make(map[string]float64)
+func (r *Runner) Run(ctx context.Context) (map[string]float64, error) {
+	latencies := make(map[string]float64)
 
 	var opts liteapi.Option = liteapi.Mainnet()
 	if r.UseTestnet {
@@ -63,7 +62,7 @@ func (r *Runner) Run(ctx context.Context) (latencies map[string]float64, err err
 		return nil, fmt.Errorf("seed: %w", err)
 	}
 
-	w, err := wallet.New(privateKey, wallet.V5R1, nil, wallet.WithNetworkGlobalID(networkID))
+	w, err := wallet.New(privateKey, wallet.V5R1, cli, wallet.WithNetworkGlobalID(networkID))
 	if err != nil {
 		return nil, fmt.Errorf("wallet: %w", err)
 	}
