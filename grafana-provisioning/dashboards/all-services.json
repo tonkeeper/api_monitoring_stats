@@ -420,7 +420,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(tonstatus_tx_propagation_latency_seconds_sum[10m])) by (service)/sum(rate(tonstatus_tx_propagation_latency_seconds_count[10m])) by (service)",
+          "expr": "sum(rate(tonstatus_tx_propagation_latency_seconds_sum[1h])) by (service)/sum(rate(tonstatus_tx_propagation_latency_seconds_count[1h])) by (service)",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{service}}",
