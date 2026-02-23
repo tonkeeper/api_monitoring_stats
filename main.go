@@ -97,7 +97,7 @@ func buildTxPropagationRunner(interval time.Duration) *txpropagation.Runner {
 		&txpropagation.ToncenterChecker{
 			ServiceName: "testnet.toncenter.com",
 			Prefix:      "https://testnet.toncenter.com/api/v3",
-			Token:       config.Config.TonCenterApiToken,
+			Token:       config.Config.TonCenterApiTokenTestnet,
 		},
 	}
 	return &txpropagation.Runner{

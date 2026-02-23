@@ -24,10 +24,11 @@ var Config = struct {
 	DtonToken         string                        `env:"DTONTOKEN"`
 	ChainstackToken   string                        `env:"CHAINSTACK_TOKEN"`
 
-	TxTimingSeed         string `env:"TX_TIMING_SEED"`
-	TxTimingNetwork      string `env:"TX_TIMING_NETWORK" envDefault:"testnet"`
-	TxTimingCheckMinutes int    `env:"TX_TIMING_CHECK_MINUTES" envDefault:"20"`
-	TonapiSSEApiKey      string `env:"TONAPI_SSE_API_KEY"`
+	TxTimingSeed             string `env:"TX_TIMING_SEED"`
+	TxTimingNetwork          string `env:"TX_TIMING_NETWORK" envDefault:"testnet"`
+	TxTimingCheckMinutes     int    `env:"TX_TIMING_CHECK_MINUTES" envDefault:"20"`
+	TonapiSSEApiKey          string `env:"TONAPI_SSE_API_KEY"`
+	TonCenterApiTokenTestnet string `env:"TONCENTER_API_TOKEN_TESTNET"`
 }{}
 
 func LoadConfig() {
