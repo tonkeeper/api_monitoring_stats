@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -30,16 +30,21 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
-          "decimals": 2,
           "mappings": [],
+          "max": 1,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           },
@@ -48,12 +53,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 24,
+        "h": 7,
+        "w": 12,
         "x": 0,
         "y": 0
       },
-      "id": 4,
+      "id": 2,
       "options": {
         "minVizHeight": 75,
         "minVizWidth": 75,
@@ -66,7 +71,7 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": false
+        "showThresholdMarkers": true
       },
       "pluginVersion": "10.2.2",
       "targets": [
@@ -76,14 +81,14 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(sum_over_time(tonstatus_http_api[$__range])) by (service) / sum(count_over_time(tonstatus_http_api[$__range])) by (service)",
+          "expr": "sum(sum_over_time(tonconnect_bridge_availability[$__range])) by (bridge) / sum(count_over_time(tonconnect_bridge_availability[$__range])) by (bridge)",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Uptime",
+      "title": "Bbridge availability",
       "type": "gauge"
     },
     {
@@ -91,7 +96,6 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -109,123 +113,35 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 5
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
       "id": 1,
       "options": {
         "calculate": false,
-        "cellGap": 2,
-        "cellValues": {
-          "unit": "percentunit"
-        },
+        "cellGap": 1,
         "color": {
-          "exponent": 1.5,
-          "fill": "dark-green",
+          "exponent": 0.5,
+          "fill": "dark-orange",
           "max": 1,
           "min": 0,
           "mode": "scheme",
           "reverse": true,
           "scale": "exponential",
-          "scheme": "RdYlGn",
-          "steps": 14
+          "scheme": "Greens",
+          "steps": 64
         },
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
         },
         "filterValues": {
-          "le": -1
+          "le": 1e-9
         },
         "legend": {
           "show": false
         },
         "rowsFrame": {
-          "layout": "auto",
-          "value": "Availability"
-        },
-        "tooltip": {
-          "show": true,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "right",
-          "reverse": true,
-          "unit": "percentunit"
-        }
-      },
-      "pluginVersion": "10.2.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "editorMode": "code",
-          "expr": "tonstatus_http_api",
-          "instant": false,
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Service availability",
-      "type": "heatmap"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "scaleDistribution": {
-              "type": "linear"
-            }
-          },
-          "fieldMinMax": false
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 12
-      },
-      "id": 2,
-      "options": {
-        "calculate": false,
-        "cellGap": 2,
-        "cellValues": {
-          "unit": "s"
-        },
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "max": 120,
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Blues",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "green"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
-        "legend": {
-          "show": true
-        },
-        "rowsFrame": {
           "layout": "auto"
         },
         "tooltip": {
@@ -233,9 +149,8 @@
           "yHistogram": false
         },
         "yAxis": {
-          "axisPlacement": "right",
-          "reverse": false,
-          "unit": "s"
+          "axisPlacement": "left",
+          "reverse": false
         }
       },
       "pluginVersion": "10.2.2",
@@ -246,16 +161,14 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "exemplar": false,
-          "expr": "histogram_quantile(0.95, sum(rate(tonstatus_indexing_latency_bucket{}[$__rate_interval])) by (le, service))",
-          "format": "time_series",
+          "expr": "tonconnect_bridge_availability",
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{bridge}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Indexing latency",
+      "title": "bridge_availability",
       "type": "heatmap"
     },
     {
@@ -274,38 +187,38 @@
             "scaleDistribution": {
               "type": "linear"
             }
-          },
-          "fieldMinMax": false
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
-        "y": 21
+        "y": 7
       },
       "id": 3,
       "options": {
         "calculate": false,
-        "cellGap": 2,
+        "cellGap": 1,
         "cellValues": {
           "unit": "s"
         },
         "color": {
           "exponent": 0.5,
           "fill": "dark-orange",
+          "max": 1,
           "mode": "scheme",
           "reverse": false,
           "scale": "exponential",
           "scheme": "Greens",
-          "steps": 76
+          "steps": 74
         },
         "exemplars": {
           "color": "rgba(255,0,255,0.7)"
         },
         "filterValues": {
-          "le": 1e-9
+          "le": 0.01
         },
         "legend": {
           "show": true
@@ -318,9 +231,8 @@
           "yHistogram": false
         },
         "yAxis": {
-          "axisPlacement": "right",
-          "reverse": false,
-          "unit": "clocks"
+          "axisPlacement": "left",
+          "reverse": false
         }
       },
       "pluginVersion": "10.2.2",
@@ -330,18 +242,21 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "histogram_quantile(0.95, sum(rate(tonstatus_functions_time_bucket{}[$__rate_interval])) by (le, service))",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(1, sum by(le, bridge) (rate(tonconnect_bridge_latency_bucket[$__rate_interval])))",
           "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "instant": false,
-          "interval": "",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
-      "title": "Get account balance latency",
+      "title": "bridge latency",
+      "transformations": [],
       "type": "heatmap"
     },
     {
@@ -349,69 +264,79 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Time from tx sent to network until it appeared in the API (only when TX_TIMING_* is configured).",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "fieldMinMax": false
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 30
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 7
       },
-      "id": 5,
+      "id": 4,
       "options": {
-        "calculate": false,
-        "cellGap": 2,
-        "cellValues": {
-          "unit": "s"
-        },
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "max": 15,
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "Purples",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255, 0, 255, 0.7)"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
         "legend": {
-          "show": true
-        },
-        "rowsFrame": {
-          "layout": "auto"
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "show": true,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "right",
-          "reverse": false,
-          "unit": "s"
+          "mode": "single",
+          "sort": "none"
         }
       },
-      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -419,20 +344,18 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(rate(tonstatus_tx_propagation_latency_seconds_sum[1h])) by (service)/sum(rate(tonstatus_tx_propagation_latency_seconds_count[1h])) by (service)",
-          "format": "time_series",
+          "expr": "rate(tonconnect_bridge_reconnects[10m])",
           "instant": false,
-          "legendFormat": "{{service}}",
+          "legendFormat": "{{bridge}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Tx propagation latency (testnet)",
-      "type": "heatmap"
+      "title": "bridge reconnects per second",
+      "type": "timeseries"
     }
   ],
-  "refresh": "5m",
+  "refresh": "",
   "schemaVersion": 38,
   "tags": [],
   "templating": {
@@ -444,8 +367,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "All services",
-  "uid": "dc73a325-fee4-466a-aabb-cd161bbe07b9",
-  "version": 20,
+  "title": "Wallets",
+  "uid": "d00ff486-fc8e-4b35-bbb3-6113d3686c97",
+  "version": 10,
   "weekStart": ""
 }
