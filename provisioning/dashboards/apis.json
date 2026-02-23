@@ -349,7 +349,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Time from tx sent to network until it appeared in the API (only when TX_TIMING_* is configured).",
+      "description": "Time from tx sent to network until it appeared in the API.",
       "fieldConfig": {
         "defaults": {
           "custom": {
