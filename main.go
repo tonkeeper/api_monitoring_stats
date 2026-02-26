@@ -95,9 +95,21 @@ func buildTxPropagationRunner(interval time.Duration) *txpropagation.Runner {
 			APIKey:      "",
 		},
 		&txpropagation.ToncenterChecker{
-			ServiceName: "testnet.toncenter.com",
+			ServiceName: "toncenter.com",
 			Prefix:      "https://testnet.toncenter.com/api/v3",
-			Token:       config.Config.TonCenterApiTokenTestnet,
+			Token:       config.Config.TonCenterApiTokensTestnet[0],
+		},
+		&txpropagation.ToncenterStreamingV2Checker{
+			ServiceName: "toncenter-sse/confirmed",
+			BaseURL:     "https://testnet.toncenter.com/api/streaming/v2",
+			Token:       config.Config.TonCenterApiTokensTestnet[1],
+			MinFinality: "confirmed",
+		},
+		&txpropagation.ToncenterStreamingV2Checker{
+			ServiceName: "toncenter-sse/finalized",
+			BaseURL:     "https://testnet.toncenter.com/api/streaming/v2",
+			Token:       config.Config.TonCenterApiTokensTestnet[2],
+			MinFinality: "finalized",
 		},
 	}
 	return &txpropagation.Runner{
