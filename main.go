@@ -51,6 +51,9 @@ func main() {
 	if config.Config.DtonLiteServers != nil {
 		apis = append(apis, public_config.NewLiteServersMetrics("liteservers_bot", config.Config.DtonLiteServers))
 	}
+	if config.Config.TonnodeLiteServers != nil {
+		apis = append(apis, public_config.NewLiteServersMetrics("tonnode liteservers", config.Config.TonnodeLiteServers))
+	}
 
 	dappsMetrics := []metrics[services.DAppMetrics]{
 		dapps.DeDust,

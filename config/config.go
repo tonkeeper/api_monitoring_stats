@@ -17,12 +17,13 @@ import (
 var ElectorAccountID = ton.MustParseAccountID("Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF")
 
 var Config = struct {
-	TonCenterApiToken string                        `env:"TONCENTER_API_TOKEN"`
-	GetBlockKey       string                        `env:"GETBLOCK_KEY"`
-	MetricsPort       int                           `env:"METRICS_PORT" envDefault:"9010"`
-	DtonLiteServers   []liteclient.LiteserverConfig `env:"DTON_LITE_SERVERS"`
-	DtonToken         string                        `env:"DTONTOKEN"`
-	ChainstackToken   string                        `env:"CHAINSTACK_TOKEN"`
+	TonCenterApiToken  string                        `env:"TONCENTER_API_TOKEN"`
+	GetBlockKey        string                        `env:"GETBLOCK_KEY"`
+	MetricsPort        int                           `env:"METRICS_PORT" envDefault:"9010"`
+	DtonLiteServers    []liteclient.LiteserverConfig `env:"DTON_LITE_SERVERS"`
+	TonnodeLiteServers []liteclient.LiteserverConfig `env:"TONNODE_LITE_SERVERS"`
+	DtonToken          string                        `env:"DTONTOKEN"`
+	ChainstackToken    string                        `env:"CHAINSTACK_TOKEN"`
 
 	TxTimingSeed              string   `env:"TX_TIMING_SEED"`
 	TxTimingNetwork           string   `env:"TX_TIMING_NETWORK" envDefault:"testnet"`
